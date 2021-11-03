@@ -1,22 +1,31 @@
 {
-  "name": "lyhiving/guanyierp",
+  "name": "beautinow/guanyicerp",
   "description": "Guanyi ERP PHP SDK",
-  "keywords": ["ERP","Guanyi"],
-  "homepage": "https://github.com/lyhiving/guanyierp",
+  "keywords": [
+    "ERP",
+    "Guanyi"
+  ],
+  "homepage": "https://github.com/beautinow/guanyi-cerp",
   "license": "MIT",
   "authors": [
     {
-      "name": "lyhiving",
-      "email": "lyhiving@gmail.com",
+      "name": "beautinow",
+      "email": "info@beautinow.com",
       "role": "Developer"
     }
   ],
   "require": {
-    "php": ">=5.4",
-    "ext-gd": "*"
+    "php": ">=7.0",
+    "ext-gd": "*",
+    "guzzlehttp/guzzle": ">=7.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": ">=7"
   },
   "autoload": {
-    "psr-4": { "lyhiving\\guanyierp\\": "src/" }
+    "psr-4": {
+      "beautinow\\guanyicerp\\": "src/"
+    }
   },
   "minimum-stability": "dev"
 }

@@ -11,13 +11,13 @@
 使用 Composer
 
 ```json
-composer require lyhiving/guanyierp
+composer require beautinow/guanyi-cerp
 ```
 或直接在composer.json 添加
 ```json
 {
     "require": {
-            "lyhiving/guanyierp": "1.*"
+            "beautinow/guanyi-cerp": "*"
     }
 }
 ```
@@ -29,7 +29,7 @@ composer require lyhiving/guanyierp
 请通过 [后台](http://v2.guanyierp.com/index)->控制面板->应用授权->云ERP授权 获取对应。
 
 ```php
-use lyhiving\guanyierp\guanyierp;
+use beautinow\guanyicerp\guanyierp;
 
 $config = [
     'appkey' =>  '[APPKEY]',
@@ -37,7 +37,7 @@ $config = [
     'sessionkey' =>  '[SESSIONKEY]'
 ];
 
-$erp = new guanyierp($config);
+$erp = new CErpApi($config);
 
 ```
 

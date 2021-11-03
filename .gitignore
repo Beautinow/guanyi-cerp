@@ -2,3 +2,6 @@
 /examples/debug.txt
 /examples/new.txt
 .DS_Store
+composer.lock
+.phpunit.result.cache
+vendor

@@ -1,8 +1,10 @@
 <?php
 
-namespace lyhiving\guanyierp;
+namespace beautinow\guanyicerp;
 
-class guanyierp
+use GuzzleHttp\Client;
+
+class CErpApi
 {
     /** 配置文件 */
     public $config = [];
@@ -118,8 +120,6 @@ class guanyierp
     {
         return  $this->getTo('gy.erp.new.stock.get', $data, $key);
     }
-
-
 
     // 获取某个指定商品指定仓库库存
     public function getItemStock($warehouse_code, $item_code)
@@ -237,25 +237,10 @@ class guanyierp
         if (!isset($this->data['sign'])) {
             $this->sign();
         }
-        if (1) {
-            $this->body =  $this->url('POST', $url, urlencode($this->jsonEncodeCh($this->data)), ['header' => ['Content-Type:text/json;charset=utf-8']]);
-        } else {
-            $data_string = $this->jsonEncodeCh($this->data);
-            echo 'request: ' . $data_string . "\n";
-            $data_string = urlencode($data_string);
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL, $url);
-            curl_setopt($ch, CURLOPT_POST, 1);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $data_string);
-            curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-                'Content-Type:text/json;charset=utf-8',
-                'Content-Length:' . strlen($data_string)
-            ));
-            $this->body = curl_exec($ch);
-            curl_close($ch);
-        }
-        $meta = json_decode($this->body, true);
+
+        $this->body =  $this->request($url, $this->data);
+
+        $meta = $this->body;
         if (!$meta) {
             $this->setErr('Response is not json format', 500);
             return false;
@@ -264,66 +249,17 @@ class guanyierp
         return $meta;
     }
 
-    // 访问远程
-    public function url($method, $url, $data = [], $extopt = [], $timeout = null)
-    {
-        $method = strtoupper($method);
-        $scheme = parse_url($url, PHP_URL_SCHEME);
-        if (!function_exists('curl_init') || ($extopt && isset($extopt['file_get_contents']) && $extopt['file_get_contents'])) {
-            if (isset($extopt['file_get_contents'])) unset($extopt['file_get_contents']);
-            if (is_array($data)) {
-                $data = http_build_query($data, "", '&');
-            }
-            $opts = array(
-                $scheme => array(
-                    'method' => $method,
-                    'header' => '',
-                    'content' => $data,
-                    'timeout' => 60,
-                    'Connection' => "close"
-                )
-            );
-            if (!is_numeric($timeout)) unset($opts[$scheme]['timeout']);
-            if (is_null($data)) unset($opts[$scheme]['content']);
+    public function request($url, $data) {
+        $client = new Client([
+            // You can set any number of default request options.
+            'timeout'  => 2.0,
+        ]);
 
-            if ($scheme == 'https') { //忽略证书部分
-                $extopt["ssl"] = array(
-                    "verify_peer" => false,
-                    "verify_peer_name" => false,
-                );
-            }
-            if ($extopt) {
-                if (isset($extopt['header']) && $extopt['header'] && is_array($extopt['header'])) {
-                    $extopt['header'] = implode('\r\n', $extopt['header']);
-                }
-                $opts = array_merge($opts, $extopt);
-            }
-            $context = stream_context_create($opts);
-            $content = file_get_contents($url, false, $context);
-            return $content;
-        } else {
-            if (isset($extopt['file_get_contents'])) unset($extopt['file_get_contents']);
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL, $url);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            if ($method == 'POST') {
-                curl_setopt($ch, CURLOPT_POST, 1);
-                if (is_array($data)) {
-                    $data = http_build_query($data, "", '&');
-                }
-                curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-            }
-            if ($method == 'GET') {
-                curl_setopt($ch, CURLOPT_HTTPGET, true);
-            }
-            if (isset($extopt['header']) && $extopt['header'] && is_array($extopt['header'])) {
-                array_push($extopt['header'], 'Content-Length:' . strlen($data));
+        $response = $client->post($url, [
+            'json'  =>  $data
+        ]);
 
-                curl_setopt($ch, CURLOPT_HTTPHEADER, $extopt['header']);
-            }
-            $content = curl_exec($ch);
-            curl_close($ch);
-            return $content;
-        }
+        return json_decode($response->getBody(), true);
     }
+
 }
