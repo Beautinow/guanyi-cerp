@@ -66,4 +66,20 @@ class CErpApiTest extends TestCase
         $this->assertTrue(count($shops) > 0);
     }
 
+    function testAddTrade() {
+        $config = [
+            'appkey' =>  '',
+            'secret' =>  '',
+            'sessionkey' =>  ''
+        ];
+
+        $api = new CErpApi($config);
+        $trade = $api->addTrade([
+
+        ]);
+        print_r($trade);
+        $this->assertTrue(is_array($trade));
+        $this->assertTrue(count($trade) > 0);
+    }
+
 }

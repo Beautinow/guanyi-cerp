@@ -121,6 +121,11 @@ class CErpApi
         return  $this->getTo('gy.erp.new.stock.get', $data, $key);
     }
 
+    public function addTrade($data = [])
+    {
+        return  $this->getTo('gy.erp.trade.add', $data);
+    }
+
     // 获取某个指定商品指定仓库库存
     public function getItemStock($warehouse_code, $item_code)
     {
