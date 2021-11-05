@@ -115,6 +115,10 @@ class CErpApi
         return  $this->getTo('gy.erp.vip.get', $data, $key);
     }
 
+    public function addVip($data = [], $key = null) {
+        return  $this->getTo('gy.erp.vip.add', $data, $key);
+    }
+
     // 获取库存
     public function getStock($data = [], $key = 'stocks')
     {
