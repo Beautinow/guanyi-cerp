@@ -125,6 +125,11 @@ class CErpApi
         return  $this->getTo('gy.erp.new.stock.get', $data, $key);
     }
 
+    public function getTrade($data = [], $key = 'orders')
+    {
+        return  $this->getTo('gy.erp.trade.get', $data, $key);
+    }
+
     public function addTrade($data = [])
     {
         return  $this->getTo('gy.erp.trade.add', $data);
